@@ -30,9 +30,13 @@ const VideoChat = () => {
 
       const url = '/v2/debates/'+id;
       const response = await axios.get(url);
-      console.log(response.data[0].password)
-      console.log(password)
-      if (response.data[0].password===password){
+      const actualPassword = response.data[0].password;
+      const params = {};
+      params.actual = actualPassword;
+      params.attempt = password;
+      const enterRoom = await axios.post('/v2/verify', params);
+
+      if (enterRoom.data.success){
         const data = await fetch("/video/token", {
           method: "POST",
           body: JSON.stringify({

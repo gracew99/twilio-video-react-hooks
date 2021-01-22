@@ -5,6 +5,9 @@ const pino = require('express-pino-logger')();
 const { videoToken } = require('./tokens');
 const mongoose = require('mongoose')
 const DebatePosts = require('./dbModel.js')
+var generator = require('generate-password');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -98,14 +101,25 @@ app.get('/v2/topics/:topicName', (req, res) => {
 // register a new debate
 app.post('/v2/posts', (req, res) => {
   const dbDebatePosts = req.body;
-  DebatePosts.create(dbDebatePosts, (err, data) => {
-      if (err){
-          res.status(500).send(err)
-          console.log(err)
-      } else{
-          res.status(201).send(data)
-      }
-  })
+  var password = generator.generate();
+  console.log(password)
+
+  bcrypt.genSalt(saltRounds, function(err, salt) {
+    bcrypt.hash(password, salt, function(err, hash) {
+        dbDebatePosts.password = hash;
+
+      DebatePosts.create(dbDebatePosts, (err, data) => {
+          if (err){
+              res.status(500).send(err)
+              console.log(err)
+          } else{
+              res.status(201).send(data)
+          }
+      })
+    });
+  });
+
+
 })
 
 // get details for a specific debate
@@ -151,6 +165,19 @@ app.post('/v2/debates/signUp/:debateId', (req, res) => {
       } else{
           res.sendStatus(201) 
       }
+  });
+})
+
+
+// check whether passwords match
+app.post('/v2/verify', (req, res) => {
+  const body = req.body;
+  const data = {success: false};
+  bcrypt.compare(body.attempt, body.actual, function(err, result) {
+    if (result){
+      data.success = true;
+    }
+    res.status(201).send(data); 
   });
 })
 
