@@ -5,21 +5,20 @@
 }
 
 html {
+  text-align: center;
+  background-color: #456268;
+  color: #456268;
+  margin: 0;
   height: 100%;
 }
 
 body {
   font-family: Helvetica, Arial, sans-serif;
-  color: #333e5a;
   min-height: 100%;
-}
-
-header {
-  background: #f0293e;
-  color: #fff;
-  text-align: center;
-  flex-grow: 0;
-  margin-bottom: 2em;
+  text-align: center !important;
+  margin: 0;
+  height: 100%;
+  background-color: #456268 !important;
 }
 
 h1 {
@@ -29,21 +28,24 @@ h1 {
 
 #root {
   min-height: 100vh;
+  height: 100%;
 }
 
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  text-align: center;
+  background-color: #456268;
+  color: #456268;
+  height: 100%;
 }
 
 main {
-  background: #ffffff;
   flex-grow: 1;
 }
 
 form {
-  max-width: 300px;
   margin: 0 auto;
 }
 
@@ -71,8 +73,8 @@ form > div > input {
 }
 
 button {
-  background: #333e5a;
-  color: #fff;
+  background-color: #fcf8ec !important; 
+  color: #456268 !important;
   font-size: 16px;
   padding: 0.4em;
   border-radius: 6px;
@@ -130,50 +132,13 @@ video {
   border-radius: 6px;
 }
 
-footer {
-  background: #333e5a;
-  color: #fff;
-  text-align: center;
-  flex-grow: 0;
-  padding: 1em 0;
-}
-
-footer a {
-  color: #fff;
-}
-
-
-
 
 
 
 
 /* https://colorhunt.co/palette/226680 */
 
-html {
-  text-align: center;
-  background-color: #456268;
-  color: #456268;
-  margin: 0;
-  height: 100%;
-}
 
-body {
-  margin: 0;
-  height: 100%;
-  background-color: #456268 !important;
-}
-
-#root {
-  height: 100%;
-}
-
-.App {
-  text-align: center;
-  background-color: #456268;
-  color: #456268;
-  height: 100%;
-}
 .alert {
   font-size: 18px !important;
   position: absolute !important;
@@ -308,6 +273,9 @@ input {
 
 .submit {
   margin-right: 10% !important;
+  background-color: #fcf8ec !important; 
+  color: #456268 !important;
+  padding: 1%;
 }
 
 textarea {
@@ -316,7 +284,7 @@ textarea {
 
 .registerDebate {
   color: #fcf8ec;
-  width: 50% !important;
+  width: 75% !important;
   margin: auto !important;
 }
 
