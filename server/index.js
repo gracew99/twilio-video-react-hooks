@@ -1,3 +1,4 @@
+const path = require("path");
 const config = require('./config');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -15,6 +16,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(pino);
+app.use(express.static(path.join(__dirname, "..", "build")));
+
 app.use(express.json());
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*"),
@@ -184,6 +187,6 @@ app.post('/v2/verify', (req, res) => {
 })
 
 
-app.listen(8000, () =>
-  console.log('Express server is running on localhost:8000')
+app.listen(config.port, () =>
+  console.log(`Express server is running on localhost:${config.port}``)
 );
