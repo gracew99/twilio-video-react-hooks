@@ -122,19 +122,23 @@ app.get('/v2/debates/:debateId', (req, res) => {
   });
 })
 
-// get number of attendees
-app.get('/v2/debates/signUp/:debateId', (req, res) => {
-  const debateId = req.params.debateId;
-  DebatePosts.find( { _id: debateId }, (err, data) => {
-      if (err){
-          res.status(500).send(err)
-          console.log(err)
-      } else{
-          const attendees = data[0].attendees ? data[0].attendees : 0;
-          res.status(200).send(attendees.toString()) 
-      }
-  });
-})
+// // get number of attendees
+// app.get('/v2/debates/signUp/:debateId', (req, res) => {
+//   const debateId = req.params.debateId;
+//   DebatePosts.find( { _id: debateId }, (err, data) => {
+//       if (err){
+//           res.status(500).send(err)
+//           console.log(err)
+//       } else{
+//           const attendees = data[0].attendees ? data[0].attendees : 0;
+//           const date = data[0].date;
+//           const body = {}
+//           body.attendees = attendees.toString();
+//           body.date = date;
+//           res.status(200).send(body) 
+//       }
+//   });
+// })
 
 // sign up to attend a debate
 app.post('/v2/debates/signUp/:debateId', (req, res) => {

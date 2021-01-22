@@ -1,21 +1,18 @@
-import React from 'react'
+import React, { useState, useEffect} from 'react';
 import { useHistory, useParams } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
-
-const isToday = (someDateString) => {
-    const someDate = new Date(Date.parse(someDateString));
-    const today = new Date()
-    return someDate.getDate() === today.getDate() &&
-      someDate.getMonth() === today.getMonth() &&
-      someDate.getFullYear() === today.getFullYear()
-  }
-  
-
+import isTodayFn from '../isToday';
 
 function DebateCard(props) {
     let history = useHistory();
     let {topicName} = useParams();
+    const [isToday, setIsToday] = useState(0);
+
+
+    useEffect(() => {
+        setIsToday(isTodayFn(props.date));   
+    }, [])
 
     async function getDetails() {
         // note: can't access props.key so made dup props.id
@@ -25,7 +22,7 @@ function DebateCard(props) {
 
     return (
         <div className="debateCard" style={{backgroundColor:props.color}}>
-            {isToday(props.date) &&   
+            {isToday &&   
             <Badge className="badge" variant="success"> Happening Today! </Badge>}
 
             <h2>{props.person1 + " vs. " + props.person2}</h2>

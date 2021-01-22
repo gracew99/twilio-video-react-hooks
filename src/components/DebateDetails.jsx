@@ -1,23 +1,17 @@
 import React, { useState, useEffect} from 'react';
 import {useParams} from "react-router-dom"
 import axios from '../axios'
-import Badge from 'react-bootstrap/Badge'
 import Alert from 'react-bootstrap/Alert'
+import isTodayFn from '../isToday';
 
-const isToday = (someDateString) => {
-    const someDate = new Date(Date.parse(someDateString));
-    const today = new Date()
-    return someDate.getDate() === today.getDate() &&
-      someDate.getMonth() === today.getMonth() &&
-      someDate.getFullYear() === today.getFullYear()
-}
+
 
 function DebateDetails(props) {
     // WARNING: must assign to exact param name from Route path 
     let { topicid, id } = useParams();
-    const [posts, setPosts] = useState([]);
+    const [post, setPost] = useState({});
     const [attendees, setAttendees] = useState(0);
-
+    const [isToday, setIsToday] = useState(0);
 
     async function handleSignUp() {
         const url = '/v2/debates/signUp/'+id;
@@ -27,30 +21,24 @@ function DebateDetails(props) {
     }
 
     useEffect(() => {
-        async function getDebates() {
+        async function getDebate() {
             const url = '/v2/debates/'+id;
             const response = await axios.get(url);
-            setPosts(response.data);
+            setPost(response.data[0]);
+            const attendees = response.data[0].attendees ? response.data[0].attendees : 0;
+            setAttendees(attendees);
+            setIsToday(isTodayFn(response.data[0].date));
             return response;
         }
-        getDebates();
+        getDebate();
     }, [])
-    
-    useEffect(() => {
-        async function getAttendees() {
-            const url = '/v2/debates/signUp/'+id;
-            const response = await axios.get(url);
-            setAttendees(response.data);
-            return response;
-        }
-        getAttendees();
-    }, [])
+ 
 
     return (
         <div className={'debateDetailContainer'}>
-        {posts.map(post => 
-            <div className={"debateDetail"} style={{backgroundColor:props.colors[0]}}>
-                {isToday(post.date) && <Alert className="alert" variant={"success"}> Happening today! </Alert>}
+       
+            {Object.keys(post).length !== 0  && <div className={"debateDetail"} style={{backgroundColor:props.colors[0]}}>
+                {isToday && <Alert className="alert" variant={"success"}> Happening today! </Alert>}
                 <h1>{"Title: " + post.title}</h1>
                 <h1>{post.person1 + " vs. " + post.person2} <br/></h1>
                 <h4> {(new Date(Date.parse(post.date))).toLocaleDateString()} <br/><br/><br/></h4>
@@ -64,8 +52,8 @@ function DebateDetails(props) {
                 {attendees === 0 && <h4 className="attendees"> Be the first to sign up! </h4>}
                 {attendees !== 0 && <h4 className="attendees"> {attendees} attending </h4>}
                 <a href="signup" onClick={handleSignUp} className="signUp"> Sign Up </a>
-            </div>
-        )}
+            </div>}
+     
         </div>
         
     )
