@@ -188,5 +188,5 @@ app.post('/v2/verify', (req, res) => {
 
 
 app.listen(config.port, () =>
-  console.log(`Express server is running on localhost:${config.port}``)
+  console.log(`Express server is running on localhost:${config.port}`)
 );
