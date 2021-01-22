@@ -106,14 +106,15 @@ app.post('/v2/posts', (req, res) => {
 
   bcrypt.genSalt(saltRounds, function(err, salt) {
     bcrypt.hash(password, salt, function(err, hash) {
-        dbDebatePosts.password = hash;
-
+      dbDebatePosts.password = hash;
       DebatePosts.create(dbDebatePosts, (err, data) => {
           if (err){
               res.status(500).send(err)
               console.log(err)
           } else{
-              res.status(201).send(data)
+              const copiedData = JSON.parse(JSON.stringify(data));
+              copiedData.readablePassword = password;
+              res.status(201).send(copiedData)
           }
       })
     });
