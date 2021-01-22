@@ -8,6 +8,8 @@ const DebatePosts = require('./dbModel.js')
 var generator = require('generate-password');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const dotenv = require('dotenv').config();
+
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,8 +21,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "*"),
   next();
 })
-
-const connection_url = "mongodb+srv://admin:mv2kiH58dYfmXvfV@cluster0.b3bgw.mongodb.net/debate";
+const connection_url = process.env.MONGO_URL;
 mongoose.connect(connection_url, {
     useNewUrlParser: true,
     useCreateIndex: true,
