@@ -7,6 +7,7 @@ import axios from '../axios'
 const Lobby = ({
   username,
   password,
+  isCorrectPassword,
   handleUsernameChange,
   handlePasswordChange,
   handleSubmit,
@@ -34,18 +35,21 @@ const Lobby = ({
           <Form.Group as={Row}>
               <Form.Label htmlFor="name" column sm={4}> Name: </Form.Label>
               <Col sm={4}>
-              <Form.Control type="text" value={username} placeholder={"First Last"} onChange={handleUsernameChange} readOnly={connecting} required/> 
+              <Form.Control type="text" value={username} placeholder={"First Last"} onChange={handleUsernameChange} readOnly={isCorrectPassword && connecting} required/> 
               </Col>
           </Form.Group>
           <Form.Group as={Row}>
               <Form.Label htmlFor="room" column sm={4}> Room Password: </Form.Label>
               <Col sm={4}>
-              <Form.Control type="password" id="room" value={password} placeholder={"password"} onChange={handlePasswordChange} readOnly={connecting} required/> 
+              <Form.Control type="text" value={password} placeholder={"password"} onChange={handlePasswordChange} readOnly={isCorrectPassword && connecting} required/> 
               </Col>
           </Form.Group>
-        <button type="submit" disabled={connecting}>
-          {connecting ? "Connecting" : "Join"}
+        <button type="submit" disabled={isCorrectPassword && connecting}>
+          {(isCorrectPassword && connecting) ? "Connecting" : "Join"}
         </button>
+        {!isCorrectPassword && <Form.Group as={Row}>
+              <Form.Label htmlFor="room" column sm={4}> Wrong Password </Form.Label>
+          </Form.Group>}
       </Form>
     </div>
   );

@@ -3,12 +3,16 @@ import { useParams } from 'react-router-dom';
 import Video from "twilio-video";
 import Lobby from "./Lobby";
 import Room from "./Room";
+import axios from '../axios'
+
 
 const VideoChat = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [room, setRoom] = useState(null);
   const [connecting, setConnecting] = useState(false);
+  const [isCorrectPassword, setIsCorrectPassword] = useState(true);
+
   const { topicName, id } = useParams();
 
   const handleUsernameChange = useCallback((event) => {
@@ -23,29 +27,39 @@ const VideoChat = () => {
     async (event) => {
       event.preventDefault();
       setConnecting(true);
-      const data = await fetch("/video/token", {
-        method: "POST",
-        body: JSON.stringify({
-          identity: username,
-          room: id,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((res) => res.json());
-      Video.connect(data.token, {
-        name: id,
-      })
-        .then((room) => {
-          setConnecting(false);
-          setRoom(room);
+
+      const url = '/v2/debates/'+id;
+      const response = await axios.get(url);
+      console.log(response.data[0].password)
+      console.log(password)
+      if (response.data[0].password===password){
+        const data = await fetch("/video/token", {
+          method: "POST",
+          body: JSON.stringify({
+            identity: username,
+            room: id,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((res) => res.json());
+        Video.connect(data.token, {
+          name: id,
         })
-        .catch((err) => {
-          console.error(err);
-          setConnecting(false);
-        });
+          .then((room) => {
+            setConnecting(false);
+            setRoom(room);
+          })
+          .catch((err) => {
+            console.error(err);
+            setConnecting(false);
+          });
+      } else {
+        setIsCorrectPassword(false);
+      }
+
     },
-    [id, username]
+    [id, username, password]
   );
 
   const handleLogout = useCallback(() => {
@@ -89,6 +103,7 @@ const VideoChat = () => {
       <Lobby
         username={username}
         password={password}
+        isCorrectPassword={isCorrectPassword}
         id={id} 
         handleUsernameChange={handleUsernameChange}
         handlePasswordChange={handlePasswordChange}

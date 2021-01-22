@@ -34,8 +34,10 @@ function DebateCreation() {
             person2img: image2,  
             person1description: descrip1,  
             person2description: descrip2, 
+            password: title
         }
         history.push('/');
+
         const response = await axios.post('/v2/posts', params);
         setTopics(response.data);
         return response;
