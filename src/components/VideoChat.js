@@ -1,20 +1,22 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { useParams } from 'react-router-dom';
 import Video from "twilio-video";
 import Lobby from "./Lobby";
 import Room from "./Room";
 
 const VideoChat = () => {
   const [username, setUsername] = useState("");
-  const [roomName, setRoomName] = useState("");
+  const [password, setPassword] = useState("");
   const [room, setRoom] = useState(null);
   const [connecting, setConnecting] = useState(false);
+  const { topicName, id } = useParams();
 
   const handleUsernameChange = useCallback((event) => {
     setUsername(event.target.value);
   }, []);
 
-  const handleRoomNameChange = useCallback((event) => {
-    setRoomName(event.target.value);
+  const handlePasswordChange = useCallback((event) => {
+    setPassword(event.target.value);
   }, []);
 
   const handleSubmit = useCallback(
@@ -25,14 +27,14 @@ const VideoChat = () => {
         method: "POST",
         body: JSON.stringify({
           identity: username,
-          room: roomName,
+          room: id,
         }),
         headers: {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
       Video.connect(data.token, {
-        name: roomName,
+        name: id,
       })
         .then((room) => {
           setConnecting(false);
@@ -43,7 +45,7 @@ const VideoChat = () => {
           setConnecting(false);
         });
     },
-    [roomName, username]
+    [id, username]
   );
 
   const handleLogout = useCallback(() => {
@@ -80,15 +82,16 @@ const VideoChat = () => {
   let render;
   if (room) {
     render = (
-      <Room roomName={roomName} room={room} handleLogout={handleLogout} />
+      <Room roomName={id} room={room} handleLogout={handleLogout} />
     );
   } else {
     render = (
       <Lobby
         username={username}
-        roomName={roomName}
+        password={password}
+        id={id} 
         handleUsernameChange={handleUsernameChange}
-        handleRoomNameChange={handleRoomNameChange}
+        handlePasswordChange={handlePasswordChange}
         handleSubmit={handleSubmit}
         connecting={connecting}
       />

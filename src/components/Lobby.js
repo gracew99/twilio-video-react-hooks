@@ -1,20 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Row from "react-bootstrap/Row"
+import axios from '../axios'
 
 const Lobby = ({
   username,
+  password,
   handleUsernameChange,
-  roomName,
-  handleRoomNameChange,
+  handlePasswordChange,
   handleSubmit,
   connecting,
+  id
 }) => {
+
+  const [title, setTitle] = useState("");
+
+  useEffect(() => {
+    async function getDebateDetails(){  
+      const url = '/v2/debates/'+id;
+      const response = await axios.get(url);
+      setTitle(response.data[0].title)
+      return response;
+    }
+    getDebateDetails()
+  
+  }, []);
+
   return (
     <div className="registerDebate">
       <Form onSubmit={handleSubmit}>
-        <h2 className="pageTitle">Enter a room</h2>
+        <h2 className="pageTitle">Enter Room: {title}</h2>
           <Form.Group as={Row}>
               <Form.Label htmlFor="name" column sm={4}> Name: </Form.Label>
               <Col sm={4}>
@@ -22,9 +38,9 @@ const Lobby = ({
               </Col>
           </Form.Group>
           <Form.Group as={Row}>
-              <Form.Label htmlFor="room" column sm={4}> Room Name: </Form.Label>
+              <Form.Label htmlFor="room" column sm={4}> Room Password: </Form.Label>
               <Col sm={4}>
-              <Form.Control type="text" id="room" value={roomName} placeholder={"Example Room"} onChange={handleRoomNameChange} readOnly={connecting} required/> 
+              <Form.Control type="password" id="room" value={password} placeholder={"password"} onChange={handlePasswordChange} readOnly={connecting} required/> 
               </Col>
           </Form.Group>
         <button type="submit" disabled={connecting}>

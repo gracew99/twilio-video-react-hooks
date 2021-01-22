@@ -11,7 +11,8 @@ const debateSchema = mongoose.Schema({
     person2img: String,  
     person1description: String,  
     person2description: String, 
-    attendees: Number
+    attendees: Number,
+    password: String
 });
 
 module.exports = mongoose.model('debatePosts', debateSchema);

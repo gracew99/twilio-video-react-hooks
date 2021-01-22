@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import VideoChat from './VideoChat';
+import VideoChat from './components/VideoChat';
 
 import DebateCardList from './components/DebateCardList';
 import DebateTopicList from './components/DebateTopicList';
@@ -24,7 +24,7 @@ const App = () => {
         <Route path='/topics/:topicid/:id/details' component={() =><DebateDetails colors={colors}/>}  exact/>
         <Route path='/topics/:topicid/:title/signup' component={() =><DebateSignUp/>} exact />
         <Route path='/newDebate' component={() =><DebateCreation/>} />
-        <Route path='/debateStream' component={() =><VideoChat />} />
+        <Route path='/topics/:topicName/:id/debateStream' component={() =><VideoChat />} />
       </Switch>
       </main>
     </div>

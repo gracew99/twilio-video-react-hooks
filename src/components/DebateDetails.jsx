@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import {useParams} from "react-router-dom"
+import { useParams } from "react-router-dom"
 import axios from '../axios'
 import Alert from 'react-bootstrap/Alert'
 import isTodayFn from '../isToday';
@@ -31,6 +31,7 @@ function DebateDetails(props) {
             return response;
         }
         getDebate();
+
     }, [])
  
 
@@ -49,9 +50,11 @@ function DebateDetails(props) {
                 <h4 className={"bio"}>{post.person1description}</h4> <br/>
                 <h1 className={"meet"}>{"Meet " + post.person2.split(" ")[0]}</h1>
                 <h4 className={"bio"}>{post.person2description}</h4>
-                {attendees === 0 && <h4 className="attendees"> Be the first to sign up! </h4>}
-                {attendees !== 0 && <h4 className="attendees"> {attendees} attending </h4>}
-                <a href="signup" onClick={handleSignUp} className="signUp"> Sign Up </a>
+                {!isToday && attendees === 0 && <h4 className="attendees"> Be the first to sign up! </h4>}
+                {!isToday && attendees !== 0 && <h4 className="attendees"> {attendees} attending </h4>}
+                {!isToday && <a href="signup" onClick={handleSignUp} className="signUp"> Sign Up </a>}
+                {isToday && <a href="debateStream" className="signUp"> <br/><br/> <br/>  Enter Debate Room </a>}
+
             </div>}
      
         </div>

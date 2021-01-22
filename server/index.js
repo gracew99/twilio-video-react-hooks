@@ -110,8 +110,9 @@ app.post('/v2/posts', (req, res) => {
 
 // get details for a specific debate
 app.get('/v2/debates/:debateId', (req, res) => {
-
   const id = req.params.debateId;
+  console.log(id);
+
   DebatePosts.find({_id: id}, function(err, data){
       if (err) {
           res.status(500).send(err);
