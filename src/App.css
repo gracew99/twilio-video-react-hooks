@@ -141,3 +141,187 @@ footer {
 footer a {
   color: #fff;
 }
+
+
+
+
+
+
+
+/* https://colorhunt.co/palette/226680 */
+
+html {
+  text-align: center;
+  background-color: #456268;
+  color: #456268;
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  background-color: #456268 !important;
+}
+
+#root {
+  height: 100%;
+}
+
+.App {
+  text-align: center;
+  background-color: #456268;
+  color: #456268;
+  height: 100%;
+}
+.alert {
+  font-size: 18px !important;
+  position: absolute !important;
+  top: 0px;
+  width: 100%;
+  left: 0;
+}
+
+.badge {
+  font-size: 18px !important;
+  position: absolute;
+  right: -1.5%;
+  transform: rotate(40deg); 
+  top: 12.5%;
+}
+
+.form-label {
+  margin-left: 12% !important;
+}
+
+.form-control {
+  margin-left: 0 !important;
+}
+
+.homeLink {
+  background-color: #fcf8ec !important;
+  color: #456268 !important;
+ 
+}
+
+.homeLink:hover {
+  background-color: #456268;
+}
+
+img {
+  width: 20% !important;
+}
+
+.homePage {
+  color: #fcf8ec;
+}
+
+.homeText {
+  margin: 10px;
+}
+.homeImg {
+  display: block;
+  margin: auto;
+  width: 25%;
+}
+
+.pageTitle {
+  color: #fcf8ec;
+  margin-top: 2%;
+  font-size: 3rem
+}
+
+.pageSubtitle {
+  color: #fcf8ec;
+  margin-top: 2%;
+  font-size: 2rem
+}
+
+.debateCard {
+  text-align: center;
+  width: 50%;
+  height: 50%;
+  border-radius: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+  margin-bottom: 5;
+  padding: 2%;
+  position: relative;
+}
+
+.debateTopic {
+  text-align: center;
+  width: 40%;
+  border-radius: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  padding: 2%;
+
+}
+
+
+.profilepic{
+  width: 30%;
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+  margin-right: 10px;
+  margin-left: 10px;
+  border-radius: 50%;
+}
+
+.attendees {
+  margin-top: 10% !important;
+
+}
+.signUp {
+  display: inline-block;
+}
+
+.debateDetailContainer {
+  height: 100%;
+}
+
+.debateDetail {
+  text-align: center;
+  padding: 5%;
+  width: 75%;
+  margin: auto;
+  position: relative;
+}
+
+.meet {
+  text-align: left;
+  margin-left: 5%;
+}
+
+.bio {
+  text-align: left;
+  margin-left: 5%;
+}
+
+input {
+  margin-left: 25px !important;
+}
+
+.submit {
+  margin-right: 10% !important;
+}
+
+textarea {
+  margin-left: 25px !important;
+}
+
+.registerDebate {
+  color: #fcf8ec;
+  width: 50% !important;
+  margin: auto !important;
+}
+
+.viewDetails {
+  color: #fcf8ec !important; 
+  background-color: #456268 !important;
+
+}

@@ -3,11 +3,27 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
 const { videoToken } = require('./tokens');
+const mongoose = require('mongoose')
+const DebatePosts = require('./dbModel.js')
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(pino);
+app.use(express.json());
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"),
+  res.setHeader("Access-Control-Allow-Headers", "*"),
+  next();
+})
+
+const connection_url = "mongodb+srv://admin:mv2kiH58dYfmXvfV@cluster0.b3bgw.mongodb.net/debate";
+mongoose.connect(connection_url, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+})
+
 
 const sendTokenResponse = (token, res) => {
   res.set('Content-Type', 'application/json');
@@ -18,19 +34,19 @@ const sendTokenResponse = (token, res) => {
   );
 };
 
-app.get('/api/greeting', (req, res) => {
-  const name = req.query.name || 'World';
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
-});
+// app.get('/api/greeting', (req, res) => {
+//   const name = req.query.name || 'World';
+//   res.setHeader('Content-Type', 'application/json');
+//   res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
+// });
 
-app.get('/video/token', (req, res) => {
-  const identity = req.query.identity;
-  const room = req.query.room;
-  const token = videoToken(identity, room, config);
-  sendTokenResponse(token, res);
+// app.get('/video/token', (req, res) => {
+//   const identity = req.query.identity;
+//   const room = req.query.room;
+//   const token = videoToken(identity, room, config);
+//   sendTokenResponse(token, res);
 
-});
+// });
 app.post('/video/token', (req, res) => {
   const identity = req.body.identity;
   const room = req.body.room;
@@ -38,6 +54,102 @@ app.post('/video/token', (req, res) => {
   sendTokenResponse(token, res);
 });
 
-app.listen(3001, () =>
-  console.log('Express server is running on localhost:3001')
+// return list of topics to be rendered by DebateTopicList component
+app.get('/v2/topics', (req, res) => {
+  DebatePosts.find({}, function(err, data){
+      if (err) {
+          res.status(500).send(err);
+      } else {
+          const topicSet = new Set();
+          data.forEach(item => {
+              item.topics.forEach(topic => {
+                  topicSet.add(topic);
+              })
+          })
+          const topicsArr = [...topicSet];
+          topicsArr.sort();
+         res.status(200).send(topicsArr);
+      }
+  });
+})
+
+// get all upcoming debates in chronological order for a certain topic
+app.get('/v2/topics/:topicName', (req, res) => {
+  const topic = req.params.topicName;
+  
+  var getDebates = function(topic, callback) {
+      DebatePosts.find({date : {$gte: new Date().setHours(0,0,0,0)}}, (err, data) => {})
+          .where("topics", topic)
+          .sort("date")
+          .exec((err, data) => {
+              callback(err, data);
+          });
+  };
+
+  getDebates(topic, function(err, data) {
+      if (err) { 
+          res.status(500).send(err);
+      } else {
+          res.status(200).send(data)
+      }
+  });
+})
+
+// register a new debate
+app.post('/v2/posts', (req, res) => {
+  const dbDebatePosts = req.body;
+  DebatePosts.create(dbDebatePosts, (err, data) => {
+      if (err){
+          res.status(500).send(err)
+          console.log(err)
+      } else{
+          res.status(201).send(data)
+      }
+  })
+})
+
+// get details for a specific debate
+app.get('/v2/debates/:debateId', (req, res) => {
+
+  const id = req.params.debateId;
+  DebatePosts.find({_id: id}, function(err, data){
+      if (err) {
+          res.status(500).send(err);
+      } else {
+         res.status(200).send(data);
+
+      }
+  });
+})
+
+// get number of attendees
+app.get('/v2/debates/signUp/:debateId', (req, res) => {
+  const debateId = req.params.debateId;
+  DebatePosts.find( { _id: debateId }, (err, data) => {
+      if (err){
+          res.status(500).send(err)
+          console.log(err)
+      } else{
+          const attendees = data[0].attendees ? data[0].attendees : 0;
+          res.status(200).send(attendees.toString()) 
+      }
+  });
+})
+
+// sign up to attend a debate
+app.post('/v2/debates/signUp/:debateId', (req, res) => {
+  const debateId = req.params.debateId;
+  DebatePosts.updateOne( { _id: debateId },{ $inc: { attendees: 1 }}, (err, data) => {
+      if (err){
+          res.status(500).send(err)
+          console.log(err)
+      } else{
+          res.sendStatus(201) 
+      }
+  });
+})
+
+
+app.listen(8000, () =>
+  console.log('Express server is running on localhost:8000')
 );
