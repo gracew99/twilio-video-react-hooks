@@ -37,17 +37,13 @@ const VideoChat = () => {
       const enterRoom = await axios.post('/v2/verify', params);
 
       if (enterRoom.data.success){
-        const data = await fetch("/video/token", {
-          method: "POST",
-          body: JSON.stringify({
-            identity: username,
-            room: id,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }).then((res) => res.json());
-        Video.connect(data.token, {
+        const body = {};
+        body.identity = username;
+        body.room = id;
+        // USE AXIOS, NOT FETCH!
+        const getToken = await axios.post('/video/token', body);
+  
+        Video.connect(getToken.data.token, {
           name: id,
         })
           .then((room) => {
