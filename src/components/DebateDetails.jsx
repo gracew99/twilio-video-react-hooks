@@ -43,8 +43,8 @@ function DebateDetails(props) {
                 <h1>{"Title: " + post.title}</h1>
                 <h1>{post.person1 + " vs. " + post.person2} <br/></h1>
                 <h4> {(new Date(Date.parse(post.date))).toLocaleDateString()} <br/><br/><br/></h4>
-                <img src={post.person1img} class="profilepic" alt="person1"></img>
-                <img src={post.person2img} class="profilepic" alt="person2"></img><br/><br/><br/>
+                <img src={post.person1img} className="profilepic" alt="person1"></img>
+                <img src={post.person2img} className="profilepic" alt="person2"></img><br/><br/><br/>
                 <h4> | {post.topics.map(topic => topic + " | ")}</h4><br/>
                 <h1 className={"meet"}>{"Meet " + post.person1.split(" ")[0]}</h1>
                 <h4 className={"bio"}>{post.person1description}</h4> <br/>

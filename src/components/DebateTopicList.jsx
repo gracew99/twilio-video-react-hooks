@@ -4,7 +4,6 @@ import axios from '../axios'
 
 function DebateTopicList(props) {
     let i = 0;
-    const len = props.colors.length;
 
     const [topics, setTopics] = useState([]);
 
@@ -22,7 +21,7 @@ function DebateTopicList(props) {
         <div>
             <h2 className="pageTitle"> Here are the upcoming debate topics. Select a tile to view specific debates.</h2>
             {topics.map((topic) => {
-                    return <DebateTopic topic={topic} color={props.colors[(i++)%3]} /> 
+                    return <DebateTopic key={i} topic={topic} color={props.colors[(i++)%3]} /> 
                 }
             )}
         </div>

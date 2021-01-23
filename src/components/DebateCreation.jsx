@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import axios from '../axios'
-import { useHistory } from "react-router-dom";
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Row from "react-bootstrap/Row"
@@ -20,9 +19,6 @@ function DebateCreation() {
     const [descrip2, setDescrip2]= useState("");
     const [password, setPassword]= useState("");
     const [success, setSuccess]= useState(false);
-
-    let history = useHistory();
-
 
     async function handleSubmit(event) {
         event.preventDefault();

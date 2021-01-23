@@ -4,7 +4,8 @@ import { useParams } from "react-router-dom";
 import axios from '../axios';
 
 function DebateCardList(props) {
-    let { topicName } = useParams();
+    let topicName = "Animals"
+    // let { topicName } = useParams();
     const [posts, setPosts] = useState([]);
     let i = 0;
     useEffect(() => {
