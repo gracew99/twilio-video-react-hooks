@@ -2,7 +2,7 @@ import axios from 'axios';
 const port = process.env.PORT || 8000;
 
 const instance = axios.create({
-    baseURL: "http://localhost:"+port
+    baseURL: "https://gracew-debate.herokuapp.com/"
 })
 
 export default instance;
